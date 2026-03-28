@@ -2,7 +2,6 @@ import axios from "axios";
 
 const api = axios.create({
   baseURL: "https://job-portal-backend-9zo5.onrender.com/api",
-  //  baseURL: "http://localhost:3000/api",
   withCredentials: true,
 });
 
@@ -27,16 +26,12 @@ api.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        const res = await axios.get(
-          "http://localhost:3000/api/auth/refresh-token", 
-          { withCredentials: true }
-        );
+        const res = await api.get("/auth/refresh-token");
 
         const newToken = res.data.accessToken;
 
         localStorage.setItem("accessToken", newToken);
 
-      
         originalRequest.headers.Authorization = `Bearer ${newToken}`;
 
         return api(originalRequest);
